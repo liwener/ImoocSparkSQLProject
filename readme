@@ -1,36 +1,36 @@
-项目运行命令参考：
-
-submit \
---class imooc.log.SparkStatCleanJobYARN \
---name SparkStatCleanJobYARN \
---master yarn \
---executor-memory 1G \
---num-executors 1 \
---files /home/hadoop/source/ipDatabase.csv,/home/hadoop/source/ipRegion.xlsx \
-/home/hadoop/source/sql-1.0-jar-with-dependencies.jar \
-hdfs://hadoop:8020/imooc/input/* hdfs://hadoop:8020/imooc/clean
+项目需求：
+需求一：统计imooc主站最受欢迎的课程（访问次数）
+按地市统计imooc主站最受欢迎的TOP N课程
+按流量统计imooc主站最受欢迎的TOP N课程
 
 
-注意：--files在spark中的使用
-
-spark-shell --master local[2] --jars  /home/hadoop/source/mysql-connector-java-commercial-5.1.7-bin.jar
-
-spark.read.format("parquet").load("hdfs://hadoop:8020/imooc/clean/day=20170511/part-00000-e09e7a2f-be06-49f4-b87f-982fb25ac8aa.c000.snappy.parquet").show(false)
+说明：
+用户行为日志：用户每次访问网站时所有的行为数据（访问、浏览、搜索、点击...）
+用户行为轨迹、流量日志
 
 
-spark-submit \
---class imooc.log.TopNStatJobYARN \
---name TopNStatJobYARN \
---master yarn \
---executor-memory 1G \
---num-executors 1 \
-/home/hadoop/source/sql-1.0-jar-with-dependencies.jar \
-hdfs://hadoop:8020/imooc/clean 20170511
+日志数据内容：
+1）访问的系统属性： 操作系统、浏览器等等
+2）访问特征：点击的url、从哪个url跳转过来的(referer)、页面上的停留时间等
+3）访问信息：session_id、访问ip(访问城市)等
 
 
-浏览器查看集群状态：http://localhost:8088
+数据处理流程：
+1）数据采集
+	Flume： web日志写入到HDFS
 
-浏览器查看查看Hadoop状态：http://localhost:50070
+2）数据清洗
+	脏数据
+	Spark、Hive、MapReduce 或者是其他的一些分布式计算框架  
+	清洗完之后的数据可以存放在HDFS(Hive/Spark SQL)
 
+3）数据处理
+	按照我们的需要进行相应业务的统计和分析
+	Spark、Hive、MapReduce 或者是其他的一些分布式计算框架
 
+4）处理结果入库
+	结果可以存放到RDBMS、NoSQL
 
+5）数据的可视化
+	通过图形化展示的方式展现出来：饼图、柱状图、地图、折线图
+	ECharts、HUE、Zeppelin
