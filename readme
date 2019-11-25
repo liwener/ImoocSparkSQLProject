@@ -1,0 +1,36 @@
+项目运行命令参考：
+
+submit \
+--class imooc.log.SparkStatCleanJobYARN \
+--name SparkStatCleanJobYARN \
+--master yarn \
+--executor-memory 1G \
+--num-executors 1 \
+--files /home/hadoop/source/ipDatabase.csv,/home/hadoop/source/ipRegion.xlsx \
+/home/hadoop/source/sql-1.0-jar-with-dependencies.jar \
+hdfs://hadoop:8020/imooc/input/* hdfs://hadoop:8020/imooc/clean
+
+
+注意：--files在spark中的使用
+
+spark-shell --master local[2] --jars  /home/hadoop/source/mysql-connector-java-commercial-5.1.7-bin.jar
+
+spark.read.format("parquet").load("hdfs://hadoop:8020/imooc/clean/day=20170511/part-00000-e09e7a2f-be06-49f4-b87f-982fb25ac8aa.c000.snappy.parquet").show(false)
+
+
+spark-submit \
+--class imooc.log.TopNStatJobYARN \
+--name TopNStatJobYARN \
+--master yarn \
+--executor-memory 1G \
+--num-executors 1 \
+/home/hadoop/source/sql-1.0-jar-with-dependencies.jar \
+hdfs://hadoop:8020/imooc/clean 20170511
+
+
+浏览器查看集群状态：http://localhost:8088
+
+浏览器查看查看Hadoop状态：http://localhost:50070
+
+
+
